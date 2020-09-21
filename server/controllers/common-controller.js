@@ -1,109 +1,132 @@
-const pluralize = require("pluralize");
+/*eslint-disable prefer-destructuring */
+/*eslint-disable class-methods-use-this */
+/*eslint-disable prefer-promise-reject-errors */
+const BaseController = require("./base-controller");
 
-class CommonController {
+class CommonController extends BaseController {
 
-  constructor(name, app, router, data_service, application_root = "/") {
-    this._router = router;
-    this._app = app;
-    this._data_service = data_service;
-    if (application_root) {
-      this._application_root = application_root;
+  get_aggregate_request(req, res) {
+
+    let filter = this._check_filter(req);
+
+    if (this.has_parent) {
+      let parts = req.baseUrl.split("/");
+      let parent_id = `${this.parent_controller.alternate_name}_id`;
+
+      let item = { [parent_id]: `${parts[parts.length - 1]}` };
+
+      filter = {
+        ...filter,
+        ...item
+      };
     }
+    let count = 0;
 
-    this._name = name;
-    //To deal with names that have dashes
-    this._alternate_name = name.replace(/-/g, "_");
+    req.query.filter = filter;
 
-    this.setup_aggregate_routes();
-    this.setup_instance_routes();
-    this.bind_route_to_application();
-  }
+    let args = BaseController.parse_query_string_to_args(req);
 
-  bind_route_to_application() {
-    this._app.use(this._application_root, this._router);
-  }
+    this._data_service.get_count(args[2]).then((cnt) => {
+      count = cnt;
+      if ((args[0] - 1) * args[1] > count && args[0] !== 1) {
+        return Promise.reject({ "code": 404,
+          "error": "page not found" });
+      }
+      return this._data_service.get_aggregate_operation(...args);
 
-  get alternate_name() {
-    return this._alternate_name;
-  }
-
-  get aggregate_route() {
-    return `/${pluralize(this._name)}`;
-  }
-
-  get instance_route() {
-    return `/${this.aggregate_route.substr(1)}/:${this._alternate_name}_id`;
-  }
-
-  setup_aggregate_routes() {
-
-    //default aggregate routes
-    this._router
-      .route(this.aggregate_route)
-      .get(this.get_aggregate_request.bind(this))
-      .post(this.post_aggregate_request.bind(this));
-  }
-
-  setup_instance_routes() {
-
-    //default instance routes
-    this._router
-      .route(this.instance_route)
-      .get(this.get_instance_request.bind(this))
-      .post(this.execute_instance_request.bind(this))
-      .patch(this.patch_instance_request.bind(this))
-      .put(this.put_instance_request.bind(this))
-      .delete(this.delete_instance_request.bind(this));
-  }
-
-  default_request(req, res) {
-
-    let message = "Not Implemented";
-
-    if (this._message_service) {
-      message = this._message_service.not_implemented;
-    }
-
-    res.status(400).json({
-      message
+    }).then((response) => {
+      res.header("count", count);
+      this._setup_header(args, res, response);
+      res.status(response.status).json(response.message);
+    }).catch((err) => {
+      return this.send_error(res, req, err, this.constructor.name, "get_aggregate_request");
     });
   }
 
 
-  //Get All
-  get_aggregate_request(req, res) {
-    return this.default_request(req, res);
+  _check_filter(req) {
+    let filter = {};
+
+    if (req.query.filter) {
+      filter = req.query.filter;
+    }
+
+    if (typeof filter === "string") {
+      filter = JSON.parse(filter);
+    }
+    return filter;
   }
 
-  //Create New
+
   post_aggregate_request(req, res) {
-    return this.default_request(req, res);
+
+    if (this.has_parent) {
+      let parts = req.baseUrl.split("/");
+
+      req.body[`${this._parent.alternate_name}_id`] = parts[parts.length - 1];
+    }
+
+    this._data_service.post_operation(req.body).then((response) => {
+      res.status(response.status).json(response.message);
+    }).catch((err) => {
+      return this.send_error(res, req, err, this.constructor.name, "post_aggregate_request");
+    });
   }
 
-  //Get Single Instance
   get_instance_request(req, res) {
-    return this.default_request(req, res);
+
+    let id = req.params[`${this.alternate_name}_id`];
+
+    this._data_service.get_instance_operation_by_id(id).then((response) => {
+      res.status(response.status).json(response.message);
+    }).catch((err) => {
+      return this.send_error(res, req, err, this.constructor.name, "get_instance_request");
+    });
   }
 
-  //Update Instamce
   patch_instance_request(req, res) {
-    return this.default_request(req, res);
+
+    let id = req.params[`${this.alternate_name}_id`];
+
+    this._data_service.patch_operation(id, req.body).then((response) => {
+      res.status(response.status).json(response.message);
+    }).catch((err) => {
+      return this.send_error(res, req, err, this.constructor.name, "patch_instance_request");
+    });
   }
 
-  //Delete Instance
   delete_instance_request(req, res) {
-    return this.default_request(req, res);
+
+    let id = req.params[`${this.alternate_name}_id`];
+
+    this._data_service.delete_operation(id, req.body).then((response) => {
+      res.status(response.status).json(response.message);
+    }).catch((err) => {
+      return this.send_error(res, req, err, this.constructor.name, "delete_instance_request");
+    });
   }
 
-  //Replace Instance. Hardly used.
-  put_instance_request(req, res) {
-    this.default_request(req, res);
+
+  send_error(res, req, err) {
+
+    let code = 400;
+
+    if (err.code) {
+      code = err.code;
+    }
+    err.path = req.path;
+    res.status(code).send(err);
+    return Promise.resolve();
   }
 
-  //Execute Instance
-  execute_instance_request(req, res) {
-    this.default_request(req, res);
-  }
+  _setup_header(args, res) {
 
+    if (args[0] !== null) {
+      res.header("page", args[0]);
+    }
+    if (args[1]) {
+      res.header("per_page", args[1]);
+    }
+  }
 }
 module.exports = CommonController;

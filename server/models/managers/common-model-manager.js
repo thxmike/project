@@ -5,18 +5,20 @@ class CommonModelManager {
     this.model = model;
   }
 
+  default_filter(data) {
+    return {
+      "name": data.name
+    };
+  }
+
   get_aggregate_operation(page = 1, per_page = 50, filter = {}) {
     //Mongoose is zero based but pagination is one based
     let mongoose_page = page - 1;
-
+    
     return this.model
       .find(filter)
       .skip(mongoose_page * per_page)
       .limit(per_page)
-      //.lean()
-      .select({ "id": 1,
-        "code": 1,
-        "name": 1 })
       .exec()
       .then((docs) => {
         return CommonModelManager.promised_message(200, docs, false);
@@ -24,6 +26,7 @@ class CommonModelManager {
       .catch((error) => {
         return CommonModelManager.promised_message(400, error.message);
       });
+
   }
 
   get_count(filter = {}) {
@@ -99,7 +102,7 @@ class CommonModelManager {
       });
   }
 
-  delete_operation(id, data, is_soft = true) {
+  delete_operation(id, data, is_soft = false) {
     if (is_soft) {
       return this.soft_delete(id, data);
     }
@@ -145,26 +148,23 @@ class CommonModelManager {
       .findById(id)
       .exec()
       .then((instance) => {
-        let promise = null;
+        let promise = Promise.resolve();
 
         if (!instance) {
           promise = CommonModelManager.promised_message(
             410,
-            `${CommonModelManager.determine_identifier(instance)} does not exist`,
+            `${id} does not exist`,
             true
           );
-        }
-        promise = this.check_nonce(data.nonce, instance.nonce);
-        promise = this.model.deleteOne({ "_id": instance._id }).exec();
-        if (!promise) {
-          promise = instance.save();
+        } else{
+          promise = this.model.deleteOne({ "_id": instance._id }).exec();
         }
         return promise;
       })
-      .then((instance) => {
+      .then(() => {
         return CommonModelManager.promised_message(
           200,
-          `${CommonModelManager.determine_identifier(instance)} removed!`
+          `${id} removed!`
         );
       })
       .catch((error) => {
@@ -176,11 +176,8 @@ class CommonModelManager {
     let promise = null;
 
     if (instance) {
-      promise = this.check_nonce(request_data.nonce, instance.nonce.toString());
-      if (!promise) {
         this.set_data(instance, request_data);
         promise = instance.save();
-      }
     } else {
       promise = CommonModelManager.promised_message(
         410,
@@ -276,7 +273,7 @@ class CommonModelManager {
 
       return test;
     }
-    return this.check_sub_documents(data);
+    return Promise.resolve(data);
   }
 
   save_instance(Model, data) {

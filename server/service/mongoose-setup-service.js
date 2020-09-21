@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const multer = require("multer");
 const crypto = require("crypto");
 const GridFsStorage = require("multer-gridfs-storage");
+const Grid = require('gridfs-stream');
 
 //Setup default with native ES6 Promise Library
 mongoose.Promise = Promise;
@@ -29,6 +30,9 @@ class MongooseSetupService {
     if (database) {
       this.database = database;
     }
+    this.debug = debug;
+    
+    this.uri = `${uri}/${this.database}`;
 
     this.database_connection = this._mongoose.connection;
 
@@ -38,20 +42,19 @@ class MongooseSetupService {
 
     this.app_name = app_name;
     this._director = new ModelDirector(this._mongoose).director;
+  
+    this.define_options();
 
-    let options = MongooseSetupService.define_options();
-
-    const storage = MongooseSetupService.setup_grid_fs_storage(`${uri / database}`);
+    const storage = this.setup_grid_fs_storage();
 
     this.multi_part = multer({
       storage
     });
-
-    this.connect(uri, options, debug);
+    //this.connect(uri, debug);
   }
 
-  static define_options() {
-    let options = {
+  define_options() {
+    this.options = {
       "keepAlive": 300000,
       "useCreateIndex": true,
       "connectTimeoutMS": 30000,
@@ -63,8 +66,6 @@ class MongooseSetupService {
       "appname": this.app_name,
       "dbName": this.database
     };
-
-    return options;
   }
 
   get multi_part_uploader() {
@@ -75,13 +76,21 @@ class MongooseSetupService {
     return this.gfs;
   }
 
-  connect(uri, options, debug) {
+  get connection () {
+    return this.database_connection;
+  }
 
-    this._mongoose.set("debug", debug);
-    this._mongoose.connect(uri, options)
+  connect() {
+
+    this._mongoose.set("debug", this.debug);
+    return this._mongoose.connect(this.uri, this.options)
       .then(() => {
         console.log("Mongoose is Ready");
+        this.gfs = Grid(this.database_connection.db, this._mongoose.mongo);
+        this.gfs.collection('uploads');
+        
         this.listen(this.database_connection);
+        return Promise.resolve();
       })
       .catch((error) => {
         throw new Error(error);
@@ -96,20 +105,9 @@ class MongooseSetupService {
     return this._director;
   }
 
-  setup_grid_fs_connection() {
-
-    this.database_connection.once("open", () => {
-      //init stream
-      this.gfs = new mongoose.mongo.GridFSBucket(this.database_connection.db, {
-        "bucketName": "userfiles"
-      });
-
-    });
-  }
-
-  static setup_grid_fs_storage(uri) {
+  setup_grid_fs_storage() {
     const storage = new GridFsStorage({
-      "url": uri,
+      "url": this.uri,
       "file": (req, file) => {
         return new Promise((resolve, reject) => {
           crypto.randomBytes(16, (err, buf) => {
@@ -133,7 +131,6 @@ class MongooseSetupService {
 
   listen() {
 
-    this.setup_grid_fs_connection();
     this.database_connection.on("error", (error) => {
       console.error(`Mongoose connection error: ${error}`);
       this.database_connection.close();
@@ -145,7 +142,7 @@ class MongooseSetupService {
     });
 
     this.database_connection.on("close", () => {
-      console.log("Mongoose default connection is open");
+      console.log("Mongoose default connection is closed");
       this.database_connection.close();
       //this._mongoose.database_connection.close();
     });

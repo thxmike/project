@@ -1,0 +1,279 @@
+{
+	"info": {
+		"_postman_id": "3fd19e2e-7f89-4751-a1a2-8aa00c02d63b",
+		"name": "Project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "CREATE - User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"ivank\",\n    \"first_name\": \"Ivan\",\n    \"last_name\": \"Kritz\",\n    \"email\": \"ivank@amazon.com\",\n    \"password\": \"IBelieve\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{uri}}/users",
+							"host": [
+								"{{uri}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET - Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{uri}}/users",
+							"host": [
+								"{{uri}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET - User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{uri}}/users/5f67ef611fbd1c9cfb9308e1",
+							"host": [
+								"{{uri}}"
+							],
+							"path": [
+								"users",
+								"5f67ef611fbd1c9cfb9308e1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "File",
+			"item": [
+				{
+					"name": "CREATE - System File",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/miker/Documents/Workflow.rtf"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{uri}}/files?path=\"/temp\"",
+							"host": [
+								"{{uri}}"
+							],
+							"path": [
+								"files"
+							],
+							"query": [
+								{
+									"key": "path",
+									"value": "\"/temp\""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "User File",
+			"item": [
+				{
+					"name": "CREATE - User file",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/miker/temp/generated.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{uri}}/users/5f67ef611fbd1c9cfb9308e1/files?path=\"/My Documents\"",
+							"host": [
+								"{{uri}}"
+							],
+							"path": [
+								"users",
+								"5f67ef611fbd1c9cfb9308e1",
+								"files"
+							],
+							"query": [
+								{
+									"key": "path",
+									"value": "\"/My Documents\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User File",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"shared_user_ids\": [\n        \"5f67ef8b1fbd1c9cfb9308e3\",\n        \"5f67efb81fbd1c9cfb9308e5\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{uri}}/users/5f67ef611fbd1c9cfb9308e1/files/5f67eff31fbd1c9cfb9308fb",
+							"host": [
+								"{{uri}}"
+							],
+							"path": [
+								"users",
+								"5f67ef611fbd1c9cfb9308e1",
+								"files",
+								"5f67eff31fbd1c9cfb9308fb"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET - User files",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{uri}}/users/5f67ef611fbd1c9cfb9308e1/files",
+							"host": [
+								"{{uri}}"
+							],
+							"path": [
+								"users",
+								"5f67ef611fbd1c9cfb9308e1",
+								"files"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE - User file",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{uri}}/users/5f67ef611fbd1c9cfb9308e1/files/5f67eff31fbd1c9cfb9308fb",
+							"host": [
+								"{{uri}}"
+							],
+							"path": [
+								"users",
+								"5f67ef611fbd1c9cfb9308e1",
+								"files",
+								"5f67eff31fbd1c9cfb9308fb"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET - User file Copy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{uri}}/users/5f67ef611fbd1c9cfb9308e1/files/5f67eff31fbd1c9cfb9308fb",
+							"host": [
+								"{{uri}}"
+							],
+							"path": [
+								"users",
+								"5f67ef611fbd1c9cfb9308e1",
+								"files",
+								"5f67eff31fbd1c9cfb9308fb"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{uri}}/health",
+					"host": [
+						"{{uri}}"
+					],
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{uri}}/list",
+					"host": [
+						"{{uri}}"
+					],
+					"path": [
+						"list"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

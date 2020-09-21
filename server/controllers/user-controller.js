@@ -6,6 +6,7 @@ class UserController extends CommonController {
   setup_aggregate_routes() {
     this._router
       .route(this.aggregate_route)
+      .get(this.get_aggregate_request.bind(this))
       .post(this.post_aggregate_request.bind(this));
   }
 

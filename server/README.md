@@ -21,20 +21,25 @@ To start your services execute the following command:
 
 ```npm run start```
 
-
 ## Application Routes
-
-### File
-
-- POST /files - Uploads a file (uses a multipart form)
-- GET /files/{file_id} - Gets a file
-- DELETE /files/{file_id} - Delete a file
 
 ### User
 
 - POST /users - Creates a new user
 - GET /users/{user_id} - Gets a user
 - PATCH /users/{user_id} - Updates a user
+
+### File
+
+- GET /files/{file_id} - Gets a file
+- GET /files - Gets all files
+
+### UserFile
+
+- POST /users/{user_id}/files - Creates a new file for user {user_id}
+- GET /users/{user_id}/files - Gets all file metadata for a user {user_id}
+- GET /users/{user_id}/files/{file_id} - Gets a users file metadata
+- POST /users/{user_id}/files/{file_id} - Gets a users file
 
 ### List
 

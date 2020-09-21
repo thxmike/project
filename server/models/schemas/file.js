@@ -17,24 +17,18 @@ class FileSchema extends BaseSchema {
 
     this.schema.add({
 
-      //Reference to file storage
-      "reference": {
-        "type": String,
-        "required": true
-      },
       //Used for defining folders
       "path": {
         "type": String,
         "required": true
       },
-      "primary_users": {
+      "user_id": {
         "type": mongoose.Schema.Types.ObjectId,
         "required": true,
         "ref": "users"
       },
-      "shared_users": {
+      "shared_user_ids": {
         "type": [mongoose.Schema.Types.ObjectId],
-        "required": true,
         "ref": "users"
       }
     });

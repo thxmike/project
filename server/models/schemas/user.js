@@ -19,9 +19,6 @@ class UserSchema extends BaseSchema {
     //Not needed
     this.schema.remove("description");
     this.schema.add({
-      "image": {
-
-      },
       "first_name": {
         "type": String,
         "required": true
