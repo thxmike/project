@@ -1,0 +1,50 @@
+<html class="background-color">
+  <body>
+    <div class="main-div">
+      <mat-card class="card-dimensions">
+        <mat-card-title>
+          <div class="title-padding">Sign In</div>
+        </mat-card-title>
+        <mat-card-content>
+          <form [formGroup]="form">
+            <mat-error *ngIf="loginInvalid">
+              The email and password were not recognized
+            </mat-error>
+            <div class="input-boxes">
+              <div>
+                <mat-form-field appearance="outline"
+                  class="mat-card-input-box-style">
+                  <mat-label>Email</mat-label>
+                  <input matInput  type="email" placeholder="Email"
+                    formControlName="email"
+                    required>
+                    <mat-error *ngIf="(email.dirty || email.touched) && email.invalid && email.errors.required">
+                      Valid email is required.
+                    </mat-error>
+                </mat-form-field>
+              </div>
+              <div>
+                <mat-form-field appearance="outline"
+                  class="mat-card-input-box-style">
+                  <mat-label>Password</mat-label>
+                  <input matInput type="password" placeholder="Password"
+                    formControlName="pw" required>
+                  <mat-icon matSuffix>remove_red_eye</mat-icon>
+                  <mat-error *ngIf="(pw.dirty || email.touched) && pw.invalid && pw.errors.required">
+                    Password is required.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="button-positions">
+              <button mat-button color="primary" (click)="login(email, pw)" [disabled]="checkFields(email,pw)">SIGN IN</button>
+              <button mat-button color="primary" (click)="gotoRegistration()">SIGN UP</button>
+            </div>
+          </form>
+
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </body>
+
+</html>

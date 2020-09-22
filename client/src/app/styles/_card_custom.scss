@@ -1,0 +1,8 @@
+@mixin card_custom {
+  :host {
+    .card-dimensions {
+      width: 35%;
+      height: 65%;
+    }
+  }
+}

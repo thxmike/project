@@ -25,3 +25,12 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## Additional Notes
+
+Angular Material have been added
+
+## Development Debugging
+
+Attempted to use the edge and chrome debuggers but had challenges with the browsers launching. I have not had this issue in previous projects. You may have better luck.
+Run ```ng build``` and went directly to http://localhost:4200 for checking functionality and used console.log

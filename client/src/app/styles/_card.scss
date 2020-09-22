@@ -1,0 +1,49 @@
+@mixin card {
+  :host {
+
+    .title-padding {
+      padding:15px
+    }
+    
+    .main-div {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .input-boxes {
+      padding-top: 30px;
+      padding-bottom: 20px;
+      vertical-align: middle;
+      text-align: center;
+    }
+    
+    .background-color {
+      background-color: #673ab7; 
+    }
+
+    .card-dimensions {
+      width: 35%;
+      height: 50%;
+    }
+
+    .button-positions {
+      text-align: right;
+      vertical-align: bottom;
+      width: 100%;
+      padding: 5px;
+      margin: 5px;
+    }
+
+    .mat-button {
+      padding: 10px;
+      margin: 10px;
+      min-width: 10px;
+    }
+
+    .mat-card-input-box-style {
+      width:75% !important
+    }
+  }
+}
