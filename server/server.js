@@ -7,6 +7,7 @@ const ExpressRouteLogger = require("./service/simple-express-logger");
 const RootController = require("./controllers/root-controller");
 const FileController = require("./controllers/file-controller");
 const UserController = require("./controllers/user-controller");
+const LoginController = require("./controllers/login-controller");
 const configuration = require("./configuration.json");
 const MongooseSetupService = require("./service/mongoose-setup-service");
 const Director = require("./models");
@@ -44,6 +45,16 @@ let root_controller = new RootController(app);
 console.log(`Setting up: ${root_controller.constructor.name}`);
 
 return mongoose_setup_service.connect().then(() => {
+
+  let login_controller = new LoginController(
+    "login",
+    app, express.Router(),
+    mongoose_setup_service.director.user_model_manager,
+    application_root
+  );
+
+  console.log(`Setting up: ${login_controller.constructor.name}`);
+
   let user_controller = new UserController(
     "user",
     app, express.Router(),

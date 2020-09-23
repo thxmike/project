@@ -33,6 +33,25 @@ class CommonModelManager {
     return this.model.find(filter).countDocuments();
   }
 
+  get_instance_operation_by_query(query) {
+    return this.model
+      .findOne(query)
+      .exec()
+      .then((doc) => {
+        if (doc) {
+          return CommonModelManager.promised_message(200, doc);
+        }
+        return CommonModelManager.promised_message(
+          401,
+          `${query} does not work`,
+          true
+        );
+      })
+      .catch((error) => {
+        return CommonModelManager.promised_message(400, error.message);
+      });
+  }
+
   get_instance_operation_by_id(id) {
     return this.model
       .findById(id)

@@ -241,6 +241,38 @@
 			"protocolProfileBehavior": {}
 		},
 		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "POST - Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"thxmike@hotmail.com\",\n    \"pw\": \"password2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{uri}}/login",
+							"host": [
+								"{{uri}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
 			"name": "Health",
 			"request": {
 				"method": "GET",
