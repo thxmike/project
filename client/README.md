@@ -32,5 +32,6 @@ Angular Material have been added
 
 ## Development Debugging
 
-Attempted to use the edge and chrome debuggers but had challenges with the browsers launching. I have not had this issue in previous projects. You may have better luck.
-Run ```ng build``` and went directly to http://localhost:4200 for checking functionality and used console.log
+I used the open source project Visual Studio Code for my IDE. I did run into a challenge.
+I attempted to use the edge and chrome debugger extension within Visual Studio Code but had challenges with the browsers launching. I have used this before without issue and I have not had this issue in previous projects. You may have better luck.
+To debug I ran  ```ng serve``` and attached to the Chrome process went directly to http://localhost:4200 for checking functionality and also used console.log.
