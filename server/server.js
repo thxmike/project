@@ -11,6 +11,12 @@ const LoginController = require("./controllers/login-controller");
 const configuration = require("./configuration.json");
 const MongooseSetupService = require("./service/mongoose-setup-service");
 const Director = require("./models");
+const cors = require('cors');
+
+let corsOptions = {
+  "origin": "*", //Never in real life
+  "optionsSuccessStatus": 200
+}
 
 
 const mongoose_setup_service = new MongooseSetupService(
@@ -37,6 +43,9 @@ app.use(compression());
 //This allows the parsing of the URL encoded fields in the body to be parse in the
 app.use(body_parser.urlencoded(url_encoded_options));
 app.use(body_parser.json());
+
+app.use(cors(corsOptions));
+
 //Sets up the simple logger Middleware
 app.use(ExpressRouteLogger.log);
 

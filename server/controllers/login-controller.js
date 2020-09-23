@@ -27,7 +27,7 @@ class LoginController extends CommonController {
     let query = { "email": body.email };
     this._data_service.get_instance_operation_by_query(query).then((response) => {
       if(body.pw === response.message.password){
-        res.status(200).send("OK");
+        res.status(200).send("{\"result\": \"OK\"}");
       } else {
         res.status(401).send("Access Denied");
       }
