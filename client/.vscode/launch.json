@@ -5,11 +5,18 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Attach to Chrome",
+      "port": 9222,
+      "request": "attach",
+      "type": "pwa-chrome",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
       "name": "Launch Edge against localhost",
       "type": "edge",
       "request": "launch",
       "preLaunchTask": "npm: start",
-      "url": "http://localhost:4200",
+      "url": "http://localhost:4200/",
       "webRoot": "${workspaceFolder}",
       "sourceMapPathOverrides": {
         "webpack:/*": "${webRoot}/*",
@@ -24,7 +31,7 @@
       "type": "chrome",
       "request": "launch",
       "preLaunchTask": "npm: start",
-      "url": "http://localhost:4200",
+      "url": "http://localhost:4200/",
       "webRoot": "${workspaceFolder}",
       "sourceMapPathOverrides": {
         "webpack:/*": "${webRoot}/*",
@@ -34,5 +41,6 @@
         "/./~/*": "${webRoot}/node_modules/*"
       }
     }
+    
   ]
 }

@@ -1,4 +1,4 @@
-import { AppSettingsService } from '../services/app-settings.service';
+import { AppSettingsService } from './app-settings.service';
 import { BaseHttpService } from './base-http.service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -8,7 +8,7 @@ import { User } from '../models/user.model.interface';
 @Injectable({
   providedIn: 'root'
 })
-export class UserFileApiService extends BaseHttpService<User> {
+export class UserApiService extends BaseHttpService<User> {
 
   private _user_file_uri: string;
 
@@ -25,6 +25,10 @@ export class UserFileApiService extends BaseHttpService<User> {
 
   public getUser(id: string): Observable<User> {
     return this.getItem(`${this._user_file_uri}/${id}`);
+  }
+
+  public findUser(filter: string): Observable<User> {
+    return this.findItem(`${this._user_file_uri}/users`, filter);
   }
 
   public postUser(item: User): Observable<User> {

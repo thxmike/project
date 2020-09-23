@@ -32,16 +32,18 @@ export class BaseHttpService<T> {
   }
 
   private addHeaders(headers): void {
-    headers.forEach((header) => {
-      for (const key in header) {
-        if (header.hasOwnProperty(key)) {
-          this._httpOptions.headers[key] = header[key];
+    if (headers) {
+      headers.forEach((header) => {
+        for (const key in header) {
+          if (header.hasOwnProperty(key)) {
+            this._httpOptions.headers[key] = header[key];
+          }
         }
-      }
-    });
+      });
+    }
   }
 
-  public getList(uri: string, headers: object [] = null): Observable<T[]>  {
+  public getList(uri: string, headers: object[] = null): Observable<T[]> {
     return this.get(uri, headers);
   }
 
@@ -49,12 +51,23 @@ export class BaseHttpService<T> {
     return this.get(uri, headers);
   }
 
+  public findItem(uri: string, filter: string, headers: object[] = null): Observable<T> {
+    return this.get(`${uri}?${filter}`, headers);
+  }
+
   public postItem(uri, payload, headers: object[] = null) {
+
+    this.addHeaders(headers);
+
+    return this._http.post<T>(uri, payload, this._httpOptions);
+  }
+
+  public postFile(uri, file, headers: object[] = null) {
     if (headers) {
       this.addHeaders(headers);
     }
-    return this._http.post<T>(uri, payload, this._httpOptions);
   }
+
 
   public patchItem(uri, item: Partial<T>, headers: object[] = null) {
     if (headers) {

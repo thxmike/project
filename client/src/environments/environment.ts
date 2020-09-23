@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   user_file_api: {
-    uri: 'http://localhost'
+    uri: 'http://localhost:8080'
   }
 };
 

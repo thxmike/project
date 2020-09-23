@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+import { CurrentUserService } from 'src/app/services/current-user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -9,7 +10,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(public snackBar: MatSnackBar) { }
+  public constructor(public snackBar: MatSnackBar,
+                     ) { }
+
 
   open(message, action) {
     this.snackBar.open(message, action);

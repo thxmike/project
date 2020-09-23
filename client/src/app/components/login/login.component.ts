@@ -1,7 +1,11 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { map, mergeMap, switchMap } from 'rxjs/operators';
 
+import { CurrentUserService } from 'src/app/services/current-user.service';
 import { Router } from '@angular/router';
+import { UserApiService } from 'src/app/services/user.service';
+import { UserLoginApiService } from 'src/app/services/user-login.service';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +27,10 @@ export class LoginComponent implements OnInit {
     pw: new FormControl('', Validators.required)
   });
 
-  constructor(protected fb: FormBuilder, private router: Router) { }
+  constructor(protected fb: FormBuilder, private router: Router,
+              private userLoginService: UserLoginApiService,
+              private userService: UserApiService,
+              private currentUserService: CurrentUserService) { }
 
   ngOnInit(): void {
   }
@@ -46,9 +53,26 @@ export class LoginComponent implements OnInit {
 
   public login(email, pw): void{
 
-    // TODO: Call service check credentials if success set the current user using the user service
-    localStorage.setItem('isLoggedIn', 'true');
-    this._loginInvalid = true;
+    const mail = email.value;
+    this.userLoginService.loginUser(email.value, pw.value).pipe(
+      map((response) => {
+        if (response.result === 'OK'){
+          // continue
+        } else {
+          this._loginInvalid = true;
+          throw Error('invalid login');
+        }
+        return mail;
+      }),
+      switchMap((email_address) => {
+        return this.userService.findUser(`filter={"email":"${email_address}"}`);
+      })
+    )
+    .subscribe((user) => {
+        this.currentUserService.setCurrentUser(user);
+        localStorage.setItem('isLoggedIn', 'true');
+        this._loginInvalid = false;
+    });
   }
 
   public gotoRegistration(): void  {
