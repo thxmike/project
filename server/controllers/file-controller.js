@@ -22,6 +22,7 @@ class FileController extends CommonController {
     // fail the entire transaction
     let payload = {
       name: req.file.filename,
+      original_file_name: req.file.originalname,
       description: `${req.file.originalname} uploaded on ${req.file.uploadDate} with a size of ${req.file.size}`,
       path: req.query.path || "/",
 
@@ -149,12 +150,30 @@ class FileController extends CommonController {
     });
   }
 
+  post_instance_request(req, res){
+    this._data_service.gfs.files.findOne({ filename: req.params.file_id }, (err, file) => {
+      // Check if file
+      if (!file || file.length === 0) {
+        return res.status(404).json({
+          err: 'No file exists'
+        });
+      }
+      
+      const readstream = this._data_service.gfs.createReadStream(file.filename);
+      readstream.pipe(res);
+     
+    });
+  }
+
+
+
   //Get and Update a User
   setup_instance_routes() {
     this._router
       .route(this.instance_route)
       .get(this.get_instance_request.bind(this))
       .patch(this.patch_instance_request.bind(this))
+      .post(this.post_instance_request.bind(this))
       .delete(this.delete_instance_request.bind(this));
   }
 }

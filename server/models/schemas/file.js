@@ -22,6 +22,10 @@ class FileSchema extends BaseSchema {
         "type": String,
         "required": true
       },
+      "original_file_name": {
+        "type": String,
+        "required": true
+      },
       "user_id": {
         "type": mongoose.Schema.Types.ObjectId,
         "required": true,
