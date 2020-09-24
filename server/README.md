@@ -27,6 +27,8 @@ This project debugging works best when using Visual Studio Code. It has a Launch
 
 ## Application Routes
 
+This is an overview of the applications routes available. For more concrete examples, please use the includes POSTMan Collection export file 'Project.postman_collection.json'
+
 ### User
 
 - POST /users - Creates a new user
@@ -35,15 +37,20 @@ This project debugging works best when using Visual Studio Code. It has a Launch
 
 ### File
 
+Admin only functions
+
 - GET /files/{file_id} - Gets a file
 - GET /files - Gets all files
+- POST /files - Creates a file
+- POST /files/{file_id} - Downloads a file
 
 ### UserFile
 
 - POST /users/{user_id}/files - Creates a new file for user {user_id}
 - GET /users/{user_id}/files - Gets all file metadata for a user {user_id}
 - GET /users/{user_id}/files/{file_id} - Gets a users file metadata
-- POST /users/{user_id}/files/{file_id} - Updates a users file
+- PATCH /users/{user_id}/files/{file_id} - Updates a users file
+- POST /users/{user_id}/files/{file_id} - Downloads a file
 
 ### System Related
 

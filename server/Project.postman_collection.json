@@ -125,7 +125,7 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/Users/miker/temp/generated.pdf"
+									"src": "/Users/miker/temp/GIJA-362.jpg"
 								}
 							]
 						},
@@ -198,6 +198,26 @@
 					"response": []
 				},
 				{
+					"name": "GET - User file",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{uri}}/users/5f67ef611fbd1c9cfb9308e1/files/5f67eff31fbd1c9cfb9308fb",
+							"host": [
+								"{{uri}}"
+							],
+							"path": [
+								"users",
+								"5f67ef611fbd1c9cfb9308e1",
+								"files",
+								"5f67eff31fbd1c9cfb9308fb"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "DELETE - User file",
 					"request": {
 						"method": "DELETE",
@@ -218,12 +238,12 @@
 					"response": []
 				},
 				{
-					"name": "GET - User file Copy",
+					"name": "Execute - User File",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{uri}}/users/5f67ef611fbd1c9cfb9308e1/files/5f67eff31fbd1c9cfb9308fb",
+							"raw": "{{uri}}/users/5f67ef611fbd1c9cfb9308e1/files/b70b3e9557ee4263129566911ae4ac7cGIJA-362.jpg",
 							"host": [
 								"{{uri}}"
 							],
@@ -231,7 +251,7 @@
 								"users",
 								"5f67ef611fbd1c9cfb9308e1",
 								"files",
-								"5f67eff31fbd1c9cfb9308fb"
+								"b70b3e9557ee4263129566911ae4ac7cGIJA-362.jpg"
 							]
 						}
 					},
