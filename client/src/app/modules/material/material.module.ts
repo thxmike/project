@@ -35,6 +35,7 @@ import { NgModule } from '@angular/core';
     MatTooltipModule,
     MatButtonModule,
     MatIconModule,
+    MatButtonModule,
     MatSidenavModule,
     MatListModule,
     MatCardModule,

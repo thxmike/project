@@ -2,15 +2,16 @@ import { BreakpointObserver, BreakpointState, Breakpoints } from '@angular/cdk/l
 import { map, shareReplay } from 'rxjs/operators';
 
 import { Component } from '@angular/core';
-import { CurrentUserService } from '../services/current-user.service';
+import { CurrentContextService } from '../services/current-context.service';
 import { Observable } from 'rxjs';
+import { OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss']
 })
-export class NavigationComponent {
+export class NavigationComponent implements OnInit  {
 
   isHandset$: Observable<BreakpointState> = this.breakpointObserver.observe(Breakpoints.Handset);
 
@@ -27,14 +28,15 @@ export class NavigationComponent {
   }
 
   constructor(private breakpointObserver: BreakpointObserver,
-              private currentUserService: CurrentUserService ) {}
+              private currentContextService: CurrentContextService ) {}
 
   public ngOnInit(): void{
     this.setupSubscriptions();
   }
 
+  // TODO: Put in base class and have others inherit
   private setupSubscriptions(){
-    this.currentUserService.currentUser.subscribe(
+    this.currentContextService.currentContext.subscribe(
       (user) => {
          this._name = user[0].first_name ? `${user[0].first_name} ${user[0].last_name}` : user[0].name;
          this._email = user[0].email;

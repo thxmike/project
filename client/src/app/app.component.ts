@@ -17,6 +17,7 @@ export class AppComponent {
   // Fake the login process
   public get isLoggedIn(): boolean{
 
+
     return localStorage.getItem('isLoggedIn') === 'true';
   }
 
@@ -26,7 +27,7 @@ export class AppComponent {
   }
 
   public constructor(
-    private breakpointObserver: BreakpointObserver,
+    private breakpointObserver: BreakpointObserver
     ) {
 
       localStorage.setItem('isLoggedIn', 'false');

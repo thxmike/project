@@ -17,25 +17,38 @@
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
       [opened]="(isHandset$ | async)"
       position="start">
-    <mat-toolbar>
-      <div>
+    
+      <div class="top-nav-list-style">
         <div>
-          <div>{{name}}</div>
-          <div>{{email}}</div>
+          <div class="icon-style">
+            <mat-icon>all_out</mat-icon>
+          </div>
+          <div class="name-style">{{name}}</div>
+          <div class="email-style">{{email}}</div>
         </div>
         <mat-divider></mat-divider>
-       
       </div>
-    </mat-toolbar>
-    <mat-nav-list>
-      <a mat-list-item href="#/files"><mat-icon>folder</mat-icon>My Files</a>
-      <a mat-list-item href="#/ishares"><mat-icon>folder_shared</mat-icon>Files I'm Sharing</a>
-      <a mat-list-item href="#/ushare"><mat-icon>folder_special</mat-icon>Files Shared with me</a>
-    </mat-nav-list>
+
+    <div class="middle-nav-list-style">
+      <mat-nav-list>
+        <a mat-list-item routerLink="files"><mat-icon>folder</mat-icon>My Files</a>
+        <a mat-list-item routerLink="ishare"><mat-icon>folder_shared</mat-icon>Files I'm Sharing</a>
+        <a mat-list-item routerLink="ushare"><mat-icon>folder_special</mat-icon>Files Shared with me</a>
+      </mat-nav-list>
+    </div>
+
+    <div class="bottom-nav-list-style">
+      <mat-nav-list>
+        <a mat-list-item routerLink="upload"><mat-icon>publish</mat-icon>Upload File</a>
+        <a mat-list-item href="#/logout"><mat-icon>exit_to_app</mat-icon>Files I'm Sharing</a>
+      </mat-nav-list>
+    </div>
   </mat-sidenav>
-  <mat-sidenav-content>
+  <mat-sidenav-content style="width: 99%;">
     <router-outlet>
       <!-- Add Content Here -->
     </router-outlet>
+    <app-float-button-dialog></app-float-button-dialog>
   </mat-sidenav-content>
+
 </mat-sidenav-container>

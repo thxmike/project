@@ -62,10 +62,12 @@ export class BaseHttpService<T> {
     return this._http.post<T>(uri, payload, this._httpOptions);
   }
 
-  public postFile(uri, file, headers: object[] = null) {
-    if (headers) {
-      this.addHeaders(headers);
-    }
+  public upload(uri, formData) {
+
+    return this._http.post<any>(uri, formData, {
+        reportProgress: true,
+        observe: 'events'
+      });
   }
 
 

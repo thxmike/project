@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-import { CurrentUserService } from 'src/app/services/current-user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({

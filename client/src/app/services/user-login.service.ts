@@ -1,6 +1,5 @@
 import { AppSettingsService } from './app-settings.service';
 import { BaseHttpService } from './base-http.service';
-import { CurrentUserService } from './current-user.service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -14,7 +13,7 @@ export class UserLoginApiService extends BaseHttpService<User> {
   private user_login_uri: string;
 
   public constructor(_http: HttpClient, private appSettingsService: AppSettingsService,
-                     protected currentUserService: CurrentUserService) {
+                     ) {
 
     super(_http);
     this.user_login_uri = appSettingsService.getValue('user_file_api').uri;
