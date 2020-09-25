@@ -116,12 +116,15 @@ class FileController extends CommonController {
               type = "file";
             } else {
               type = "folder";
+
               delete fileorfold.name;
               delete fileorfold.original_file_name;
               delete fileorfold.description;
             }
+          
             if(updated_messages.find((item) => item.type === 'folder' && type === 'folder' && item.path === fileorfold.path )){
               //skip: I already have this folder in the collection
+              
             } else {
               let merged_data = {...fileorfold, ...{type: type}};
               updated_messages.push(merged_data);
