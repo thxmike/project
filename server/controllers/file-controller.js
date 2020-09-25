@@ -61,9 +61,17 @@ class FileController extends CommonController {
    
   }
   */
-
+  // @Override
   get_aggregate_request(req, res) {
+
     let filter = this._check_filter(req);
+
+    let path = '/';
+
+    if(filter.path){
+      path = filter.path;
+      delete filter.path;
+    }
 
     if (this.has_parent) {
       let parts = req.baseUrl.split("/");
@@ -96,6 +104,33 @@ class FileController extends CommonController {
         }
         return this._data_service.file_model_manager.get_aggregate_operation(...args);
       })
+      //Filter and seperate Folders and Files
+      .then((response) => {
+        let updated_messages = [];
+        if(path){
+          const files = response.message.filter((file) => file.path.startsWith(path));
+          files.forEach((fileorfold) => {
+            fileorfold.toJSON
+            let type = null;
+            if(fileorfold.path === path){
+              type = "file";
+            } else {
+              type = "folder";
+              delete fileorfold.name;
+              delete fileorfold.original_file_name;
+              delete fileorfold.description;
+            }
+            if(updated_messages.find((item) => item.type === 'folder' && type === 'folder' && item.path === fileorfold.path )){
+              //skip: I already have this folder in the collection
+            } else {
+              let merged_data = {...fileorfold, ...{type: type}};
+              updated_messages.push(merged_data);
+            }
+          });
+          response.message = updated_messages;
+        } 
+        return response;
+      })
       .then((response) => {
         res.header("count", count);
         this._setup_header(args, res, response);
@@ -112,6 +147,7 @@ class FileController extends CommonController {
       });
   }
 
+  // @Override
   get_instance_request(req, res) {
 
     let id = req.params[`${this.alternate_name}_id`];
@@ -123,6 +159,7 @@ class FileController extends CommonController {
     });
   }
 
+  // @Override
   patch_instance_request(req, res) {
 
     let id = req.params[`${this.alternate_name}_id`];
@@ -134,6 +171,8 @@ class FileController extends CommonController {
     });
   }
 
+
+  //@Override
   delete_instance_request(req, res) {
 
     let id = req.params[`${this.alternate_name}_id`];
@@ -165,9 +204,22 @@ class FileController extends CommonController {
     });
   }
 
+  // @Override
+  _check_filter(req) {
+    let filter = {};
 
+    if (req.query.filter) {
+      filter = req.query.filter;
+    }
+
+    if (typeof filter === "string") {
+      filter = JSON.parse(filter);
+    }
+    return filter;
+  }
 
   //Get and Update a User
+  // @Override
   setup_instance_routes() {
     this._router
       .route(this.instance_route)

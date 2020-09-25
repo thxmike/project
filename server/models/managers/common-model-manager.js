@@ -19,6 +19,7 @@ class CommonModelManager {
       .find(filter)
       .skip(mongoose_page * per_page)
       .limit(per_page)
+      .lean()
       .exec()
       .then((docs) => {
         return CommonModelManager.promised_message(200, docs, false);
@@ -36,6 +37,7 @@ class CommonModelManager {
   get_instance_operation_by_query(query) {
     return this.model
       .findOne(query)
+      .lean()
       .exec()
       .then((doc) => {
         if (doc) {
@@ -55,7 +57,7 @@ class CommonModelManager {
   get_instance_operation_by_id(id) {
     return this.model
       .findById(id)
-      //.lean()
+      .lean()
       .exec()
       .then((doc) => {
         if (doc) {
