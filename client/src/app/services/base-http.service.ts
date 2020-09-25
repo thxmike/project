@@ -2,16 +2,11 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 
-export interface HttpOptions {
-  headers: {};
-}
 export class BaseHttpService<T> {
 
-  private _httpOptions: HttpOptions = {
-    headers: {
-      'Content-Type': 'application/json',
-    }
-  };
+  private _httpHeaders = new HttpHeaders().set(
+      'Content-Type',  'application/json'
+    );
 
   public constructor(private _http: HttpClient) { }
 
@@ -23,23 +18,16 @@ export class BaseHttpService<T> {
     this._http = value;
   }
 
-  protected get httpOptions(): HttpOptions {
-    return this._httpOptions;
-  }
-
-  protected set httpOptions(value: HttpOptions) {
-    this._httpOptions = value;
-  }
 
   private addHeaders(headers): void {
     if (headers) {
       headers.forEach((header) => {
-        for (const key in header) {
-          if (header.hasOwnProperty(key)) {
-            this._httpOptions.headers[key] = header[key];
+        for (const prop in header){
+          if (header.hasOwnProperty(prop)){
+            this._httpHeaders.set(prop, header[prop]);
           }
         }
-      });
+    });
     }
   }
 
@@ -55,11 +43,20 @@ export class BaseHttpService<T> {
     return this.get(`${uri}?${filter}`, headers);
   }
 
-  public postItem(uri, payload, headers: object[] = null) {
+
+  // Execute / download / Action on an instance
+  public downloadItem(uri, payload, headers: object[] = null) {
 
     this.addHeaders(headers);
+    return this._http.post<T>(uri, payload, { headers: this._httpHeaders, responseType: 'blob' as 'json' });
+  }
 
-    return this._http.post<T>(uri, payload, this._httpOptions);
+  public postItem(uri, payload, headers: object[] = null) {
+
+    if (headers) {
+      this.addHeaders(headers);
+    }
+    return this._http.post<T>(uri, payload, {headers: this._httpHeaders});
   }
 
   public upload(uri, formData) {
@@ -75,7 +72,7 @@ export class BaseHttpService<T> {
     if (headers) {
       this.addHeaders(headers);
     }
-    return this._http.patch<T>(uri, item, this._httpOptions).pipe(
+    return this._http.patch<T>(uri, item, {headers: this._httpHeaders}).pipe(
       retry(3), // retry a failed request up to 3 times
       catchError(this.handleError) // then handle the error
     );
@@ -95,7 +92,7 @@ export class BaseHttpService<T> {
     if (headers) {
       this.addHeaders(headers);
     }
-    return this._http.get<T>(uri, this._httpOptions).pipe(
+    return this._http.get<T>(uri, {headers: this._httpHeaders}).pipe(
       retry(3), // retry a failed request up to 3 times
       catchError(this.handleError) // then handle the error
     );

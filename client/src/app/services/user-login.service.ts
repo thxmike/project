@@ -23,4 +23,9 @@ export class UserLoginApiService extends BaseHttpService<User> {
     const payload = { email, pw };
     return this.postItem(`${this.user_login_uri}/login`, payload);
   }
+
+  public logoutUser(){
+    localStorage.setItem('isLoggedIn', 'false');
+    localStorage.setItem('isRegistering', 'false');
+  }
 }

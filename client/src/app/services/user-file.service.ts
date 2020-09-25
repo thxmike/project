@@ -18,8 +18,8 @@ export class UserFileApiService extends BaseHttpService<File> {
     this._user_file_uri = appSettingsService.getValue('user_file_api').uri;
   }
 
-  public getFiles(pageNumber, pageSize, filter = {}): Observable<File[]> {
-    const uri = `${this._user_file_uri}/files`;
+  public getUserFiles(id: string, filter = {}): Observable<File[]> {
+    const uri = `${this._user_file_uri}/users/${id}/files?filter=${JSON.stringify(filter)}`;
     return this.getList(uri);
   }
 
@@ -44,7 +44,7 @@ export class UserFileApiService extends BaseHttpService<File> {
     return this.deleteItem(`${this._user_file_uri}/${id}`, item);
   }
 
-  public downloadFile(id: string): Observable<any> {
-    return this.postItem(`${this._user_file_uri}/files/${id}`, null);
+  public downloadFile(user_id: string, file_id: string): Observable<any> {
+    return super.downloadItem(`${this._user_file_uri}/users/${user_id}/files/${file_id}`, null);
   }
 }

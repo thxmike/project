@@ -1,27 +1,52 @@
 <div class="page-styling">
-<div >
-<mat-card class="card-styling" *ngFor="let file of files">
-  <mat-card-content>
-    <div class="card-content-styling">
-      <div>
-        <div class="card-file-name">{{file.original_file_name}}</div>
-        <div class="card-type-attributes">{{file.data}}</div>
-      </div>
-      <div class="space-style">
-      </div>
-      <div class="icon-style">
-        <mat-icon *ngIf="file.type ==='folder'" [inline]="true">folder</mat-icon>
-        <mat-icon *ngIf="file.type ==='file'" [inline]="true">article</mat-icon>
-      </div>
-    </div>
-  </mat-card-content>
-  <div class="card-action-styles">
-  <mat-card-actions >
-      <button mat-button class="button-style ">VIEW</button>
-      <button mat-button class="button-style">SHARE</button>
-      <button mat-button class="button-style">DELETE</button>
-  </mat-card-actions>
-</div>
-</mat-card>
-</div>
+  <div>
+    <mat-card class="card-styling" *ngFor="let file of files">
+      <div *ngIf="file.type === 'file'; then fileContent else folderContent"></div>
+      <ng-template #fileContent>
+        <mat-card-content>
+          <div class="card-content-styling">
+            <div>
+              <div class="card-file-name">{{file.original_file_name}}</div>
+              <div class="card-type-attributes">Added
+                on {{file.timestamps.created}}</div>
+            </div>
+            <div class="space-style">
+            </div>
+            <div class="icon-style">
+              <mat-icon [inline]="true">article</mat-icon>
+            </div>
+          </div>
+        </mat-card-content>
+        <div class="card-action-styles">
+          <mat-card-actions>
+            <button mat-button class="button-style" (click)="onDownload(file)">VIEW</button>
+            <button mat-button class="button-style">SHARE</button>
+            <button mat-button class="button-style">DELETE</button>
+          </mat-card-actions>
+        </div>
+      </ng-template>
+      <ng-template #folderContent>
+        <mat-card-content>
+          <div class="card-content-styling">
+            <div>
+              <div class="card-file-name">{{file.path}}</div>
+              <div class="card-type-attributes"></div>
+            </div>
+            <div class="space-style">
+            </div>
+            <div class="icon-style">
+              <mat-icon [inline]="true">folder</mat-icon>
+            </div>
+          </div>
+        </mat-card-content>
+        <div class="card-action-styles">
+          <mat-card-actions>
+            <button mat-button class="button-style" (click)="onOpen(file)">OPEN</button>
+            <button mat-button class="button-style">SHARE</button>
+            <button mat-button class="button-style">DELETE</button>
+          </mat-card-actions>
+        </div>
+      </ng-template>
+    </mat-card>
+  </div>
 </div>

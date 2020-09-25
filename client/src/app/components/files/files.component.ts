@@ -1,6 +1,9 @@
+import * as fileSaver from 'file-saver';
+
 import { Component, OnInit } from '@angular/core';
 
 import { CurrentContextService } from 'src/app/services/current-context.service';
+import { SharedComponent } from '../shared/shared.component';
 import { UserFileApiService } from 'src/app/services/user-file.service';
 
 @Component({
@@ -8,12 +11,9 @@ import { UserFileApiService } from 'src/app/services/user-file.service';
   templateUrl: './files.component.html',
   styleUrls: ['./files.component.scss']
 })
-export class FilesComponent implements OnInit {
+export class FilesComponent extends SharedComponent implements OnInit {
 
-  private _id: string;
-  private _name: string;
-  private _email: string;
-  private _path = '/';
+
   private _files = [
   ];
 
@@ -21,19 +21,9 @@ export class FilesComponent implements OnInit {
     return this._files;
   }
 
-  public get name() {
-    return this._name;
-  }
-
-  public get email() {
-    return this._email;
-  }
-
-  public get path() {
-    return this._path;
-  }
-
-  constructor(private currentUserService: CurrentContextService, private userFileApiService: UserFileApiService) {
+  constructor(protected currentContextService: CurrentContextService,
+              private userFileApiService: UserFileApiService) {
+    super(currentContextService);
     this.setupSubscriptions();
   }
 
@@ -41,23 +31,35 @@ export class FilesComponent implements OnInit {
     this.getUserFiles();
   }
 
-  private setupSubscriptions(){
-    this.currentUserService.currentContext.subscribe(
-      (context) => {
-        this._id = context[0].id;
-        this._name = context[0].name;
-        this._path = context[0].path;
-        this._email = context[0].email;
-       }
-     );
-  }
-
   private getUserFiles() {
-    this.userFileApiService.getFiles(1, 1000, {name: this._name, path: this._path}).subscribe((fl) => {
-      fl.forEach((file) => {
-        this.files.push(file);
+    this.userFileApiService.getUserFiles(this.id, { path: `${this.path}` }).subscribe((fls) => {
+      fls.forEach((file) => {
+        this._files.push(file);
       });
     });
+  }
+
+  public onOpen(fileObj) {
+
+    const updated_array = [];
+    this.userFileApiService.getUserFiles(this.id, { path: `${fileObj.path}` }).subscribe((fls) => {
+      fls.forEach((file) => {
+        updated_array.push(file);
+      });
+      this._files = updated_array;
+    });
+
+  }
+
+  public onDownload(fileObj): void{
+    this.userFileApiService.downloadFile(this.id, fileObj.name).subscribe(response => {
+        const blob: any = new Blob([response], { type: 'text/json; charset=utf-8' });
+        const url = window.URL.createObjectURL(blob);
+        fileSaver.saveAs(blob, fileObj.original_file_name);
+		}), error => {
+      console.log(`Error downloading the file ${error}`);
+    },
+    () => console.info('File downloaded successfully');
   }
 
 }

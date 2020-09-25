@@ -70,7 +70,14 @@ export class LoginComponent implements OnInit {
       )
       .subscribe((user) => {
         const initpath = {path:  '/'};
-        const context = {...user, ...initpath };
+
+        const currentUser = user[0];
+         // tslint:disable-next-line:no-string-literal
+        currentUser.id = user[0]._id;
+
+
+        const context = {...currentUser, ...initpath  };
+
         this.currentContextService.setCurrentContext(context);
         localStorage.setItem('isLoggedIn', 'true');
         this._loginInvalid = false;

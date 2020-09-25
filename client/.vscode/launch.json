@@ -15,7 +15,7 @@
       "name": "Launch Edge against localhost",
       "type": "edge",
       "request": "launch",
-      "preLaunchTask": "npm: start",
+      //"preLaunchTask": "npm: start",
       "url": "http://localhost:4200/",
       "webRoot": "${workspaceFolder}",
       "sourceMapPathOverrides": {
@@ -30,7 +30,7 @@
       "name": "Launch Chrome against localhost",
       "type": "chrome",
       "request": "launch",
-      "preLaunchTask": "npm: start",
+      //"preLaunchTask": "npm: start",
       "url": "http://localhost:4200/",
       "webRoot": "${workspaceFolder}",
       "sourceMapPathOverrides": {
