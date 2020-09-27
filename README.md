@@ -18,7 +18,7 @@ If you are planning on doing development on this project, it is better to open e
 
 ## Daily Log
 
-A daily log of this project can be found [here](https://docs.google.com/document/d/1t-FExo2lKPxNdKB-c9myrs9MTWz9H_ewJzR6uhVpuH0/edit?usp=sharing). If you have any questions feel free to contact me via [email](thxmike@gmail.com)
+A daily log and many aspects of the development of this project can be found [here](https://docs.google.com/document/d/1t-FExo2lKPxNdKB-c9myrs9MTWz9H_ewJzR6uhVpuH0/edit?usp=sharing). If you have any questions feel free to contact me via [email](thxmike@gmail.com)
 
 ## Author
 
