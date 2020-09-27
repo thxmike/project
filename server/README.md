@@ -25,6 +25,15 @@ To start your services execute the following command:
 
 This project debugging works best when using Visual Studio Code. It has a Launch Configuration already setup. It is required that you open a Visual Studio Code Window exclusively on the server folder. Start under the debugger Launch Program.
 
+## Technologies
+
+- NodeJS - Defacto standard for service side Javascript
+- ExpressJS - simplify the setup of RESTful apis
+- MongoDB for the Data Layer
+- MongooseJS - ORM for the objects you interact with.
+- Gridfs - a middleware to chuck file data into smaller parts, due to the 6 mb limit in native mongo
+- Multer - An express middleware to parse file data in the req object.
+
 ## Application Routes
 
 This is an overview of the applications routes available. For more concrete examples, please use the includes POSTMan Collection export file 'Project.postman_collection.json'

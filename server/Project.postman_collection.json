@@ -125,12 +125,12 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/Users/miker/temp/Best Buy Order Details.pdf"
+									"src": "/Users/miker/temp/GIJA-362.jpg"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{uri}}/users/5f67ef611fbd1c9cfb9308e1/files?path=/",
+							"raw": "{{uri}}/users/5f67ef611fbd1c9cfb9308e1/files?path=/test",
 							"host": [
 								"{{uri}}"
 							],
@@ -142,7 +142,7 @@
 							"query": [
 								{
 									"key": "path",
-									"value": "/"
+									"value": "/test"
 								}
 							]
 						}
@@ -229,7 +229,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{uri}}/users/5f67ef611fbd1c9cfb9308e1/files/5f67eff31fbd1c9cfb9308fb",
+							"raw": "{{uri}}/users/5f67ef611fbd1c9cfb9308e1/files/0?filter={\"path\":\"/\"}",
 							"host": [
 								"{{uri}}"
 							],
@@ -237,7 +237,13 @@
 								"users",
 								"5f67ef611fbd1c9cfb9308e1",
 								"files",
-								"5f67eff31fbd1c9cfb9308fb"
+								"0"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "{\"path\":\"/\"}"
+								}
 							]
 						}
 					},

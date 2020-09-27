@@ -40,3 +40,8 @@ Angular Material have been added
 - I used the open source project Visual Studio Code for my IDE. I did run into a challenge. I attempted to use the edge and chrome debugger extension within Visual Studio Code but had challenges with the prelaunching the  ``` ng serve ``` command then spin up the browser launching. I have used this process before without issue. To debug I ran  ```ng serve``` and the ran the chrome debugger without prelaunching step.
 - If you are planning on making changes it is a good idea to leverge the ng cli. This can be installed with the following [steps](https://cli.angular.io/)
 - Built on Angular 10!
+
+## Technologies
+
+- Angular 10 framework for UI
+- Angular Material - UI design
