@@ -11,13 +11,13 @@ Provides RESTful API CRUD operations for a file management system.
 
 ## Dependencies
 
-Once you have NodeJS installed execute the following command to install all of your dependencies.
+Once you have NodeJS installed execute the following command to in the root directy to install all of your dependencies.
 
 ```npm install```
 
 ## Startup
 
-To start your services execute the following command:
+To start your services execute the following command in the root directory:
 
 ```npm run start```
 

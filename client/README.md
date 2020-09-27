@@ -7,6 +7,12 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 - You are required to install NodeJS version 10 or higher to run this server side component. The following web site to install the latest version for your platform or operating system. [NodeJS](https://nodejs.org/en/download/)
 - You are required to install the Angular CLI if you are planning on using the local ng cli development web server or following the instructions below. This can be installed based on these [steps](https://cli.angular.io/)
 
+## Dependencies
+
+Once you have NodeJS installed execute the following command to install all of your dependencies.
+
+```npm install```
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
