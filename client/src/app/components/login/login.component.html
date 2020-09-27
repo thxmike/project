@@ -15,12 +15,13 @@
                 <mat-form-field appearance="outline"
                   class="mat-card-input-box-style">
                   <mat-label>Email</mat-label>
-                  <input matInput  type="email" placeholder="Email"
+                  <input matInput type="email" placeholder="Email"
                     formControlName="email"
                     required>
-                    <mat-error *ngIf="(email.dirty || email.touched) && email.invalid && email.errors.required">
-                      Valid email is required.
-                    </mat-error>
+                  <mat-error *ngIf="(email.dirty || email.touched) &&
+                    email.invalid && email.errors.required">
+                    Valid email is required.
+                  </mat-error>
                 </mat-form-field>
               </div>
               <div>
@@ -30,15 +31,18 @@
                   <input matInput type="password" placeholder="Password"
                     formControlName="pw" required>
                   <mat-icon matSuffix>remove_red_eye</mat-icon>
-                  <mat-error *ngIf="(pw.dirty || email.touched) && pw.invalid && pw.errors.required">
+                  <mat-error *ngIf="(pw.dirty || email.touched) && pw.invalid &&
+                    pw.errors.required">
                     Password is required.
                   </mat-error>
                 </mat-form-field>
               </div>
             </div>
             <div class="button-positions">
-              <button mat-button color="primary" (click)="login(email, pw)" [disabled]="checkFields(email,pw)">SIGN IN</button>
-              <button mat-button color="primary" (click)="gotoRegistration()">SIGN UP</button>
+              <button mat-button color="primary" (click)="login(email, pw)"
+                [disabled]="checkFields(email,pw)">SIGN IN</button>
+              <button mat-button color="primary" (click)="gotoRegistration()">SIGN
+                UP</button>
             </div>
           </form>
 

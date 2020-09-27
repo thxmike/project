@@ -1,11 +1,14 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { map, mergeMap, switchMap } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
 
 import { CurrentContextService } from 'src/app/services/current-context.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { UserApiService } from 'src/app/services/user.service';
 import { UserLoginApiService } from 'src/app/services/user-login.service';
+import { throwError } from 'rxjs/internal/observable/throwError';
 
 @Component({
   selector: 'app-login',
@@ -54,19 +57,21 @@ export class LoginComponent implements OnInit {
   public login(email, pw): void {
 
     const mail = email.value;
+    this._loginInvalid = false;
     this.userLoginService.loginUser(email.value, pw.value).pipe(
-      map((response) => {
-        if (response.result === 'OK') {
-          // continue
-        } else {
-          this._loginInvalid = true;
-          throw Error('invalid login');
-        }
-        return mail;
-      }),
-      switchMap((email_address) => {
-          return this.userService.findUser(`filter={"email":"${email_address}"}`);
-        })
+        map((response) => {
+          if (response.result === 'OK') {
+            // continue
+          } else {
+            this._loginInvalid = true;
+            throw Error('invalid login');
+          }
+          return mail;
+        }),
+        switchMap((email_address) => {
+            return this.userService.findUser(`filter={"email":"${email_address}"}`);
+        }),
+        catchError(err => this.errorHandler(err))
       )
       .subscribe((user) => {
         const initpath = {path:  '/'};
@@ -82,6 +87,11 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('isLoggedIn', 'true');
         this._loginInvalid = false;
       });
+  }
+
+  errorHandler(error: HttpErrorResponse): Observable<never> {
+    this._loginInvalid = true;
+    return throwError(error.message || 'server error.');
   }
 
   public gotoRegistration(): void {

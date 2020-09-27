@@ -1,14 +1,17 @@
 import { CurrentContextService } from 'src/app/services/current-context.service';
+import { FileRefreshService } from 'src/app/services/file-refresh.service';
+import { MatDialog } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 
 export class SharedComponent {
 
-  private _id: string;
-  private _name: string;
-  private _email: string;
-  private _path = '/';
+  protected _userId: string;
+  protected _name: string;
+  protected _email: string;
+  protected _path = '/';
 
-  public get id(): string {
-    return this._id;
+  public get userId(): string {
+    return this._userId;
   }
 
   public get name(): string {
@@ -22,20 +25,37 @@ export class SharedComponent {
   public get path(): string {
     return this._path;
   }
+  protected _dialogSubscription: Subscription;
 
-  constructor(protected currentContextService: CurrentContextService){
+  constructor(protected currentContextService: CurrentContextService,
+              protected dialog: MatDialog,
+              protected fileRefreshService: FileRefreshService){
 
   }
 
   protected setupSubscriptions(): void{
     this.currentContextService.currentContext.subscribe(
       (context) => {
-        this._id = context.id;
+        this._userId = context.id;
         this._name = context.name;
         this._path = context.path;
         this._email = context.email;
        }
      );
+  }
+
+  public onOpenBasicDialog<U>(UCtor: new (...args: any[]) => U,
+                              config: any ): void {
+    const dialogRef = this.dialog.open(UCtor, {
+      width: config.width,
+      height: config.height,
+      panelClass: config.panelClass
+    });
+
+    this._dialogSubscription = dialogRef.afterClosed().subscribe(() => {
+      console.log('Closing Dialoge');
+      this.fileRefreshService.update();
+    });
   }
 
 }

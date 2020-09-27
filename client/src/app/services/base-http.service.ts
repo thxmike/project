@@ -51,6 +51,15 @@ export class BaseHttpService<T> {
     return this._http.post<T>(uri, payload, { headers: this._httpHeaders, responseType: 'blob' as 'json' });
   }
 
+  public uploadItem(uri, formData, headers: object [] = null) {
+    return this._http.post<any>(uri, formData, {
+      reportProgress: true,
+      observe: 'events'
+    }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   public postItem(uri, payload, headers: object[] = null) {
 
     if (headers) {
@@ -78,11 +87,11 @@ export class BaseHttpService<T> {
     );
   }
 
-  public deleteItem(uri, item: Partial<T>, headers: object[] = null): Observable<T> {
+  public deleteItem(uri, headers: object[] = null): Observable<void> {
     if (headers) {
       this.addHeaders(headers);
     }
-    return this._http.delete<T>(uri, item).pipe(
+    return this._http.delete<void>(uri).pipe(
       retry(3), // retry a failed request up to 3 times
       catchError(this.handleError) // then handle the error
     );

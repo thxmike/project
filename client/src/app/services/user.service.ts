@@ -10,36 +10,36 @@ import { User } from '../models/user.model.interface';
 })
 export class UserApiService extends BaseHttpService<User> {
 
-  private _user_file_uri: string;
+  private _userFileUri: string;
 
   public constructor(_http: HttpClient, appSettingsService: AppSettingsService) {
 
     super(_http);
-    this._user_file_uri = appSettingsService.getValue('user_file_api').uri;
+    this._userFileUri = appSettingsService.getValue('user_file_api').uri;
   }
 
   public getUsers(pageNumber, pageSize, filter = {}): Observable<User[]> {
-    const requestUrl = `${this._user_file_uri}`;
+    const requestUrl = `${this._userFileUri}`;
     return this.getList(requestUrl);
   }
 
   public getUser(id: string): Observable<User> {
-    return this.getItem(`${this._user_file_uri}/${id}`);
+    return this.getItem(`${this._userFileUri}/${id}`);
   }
 
   public findUser(filter: string): Observable<User> {
-    return this.findItem(`${this._user_file_uri}/users`, filter);
+    return this.findItem(`${this._userFileUri}/users`, filter);
   }
 
-  public postUser(item: User): Observable<User> {
-    return this.postItem(`${this._user_file_uri}`, item);
+  public createUser(item: User): Observable<User> {
+    return this.postItem(`${this._userFileUri}/users`, item);
   }
 
-  public patchUser(id: string, item: Partial<User>): Observable<User> {
-    return this.patchItem(`${this._user_file_uri}/${id}`, item);
+  public updateUser(id: string, item: Partial<User>): Observable<User> {
+    return this.patchItem(`${this._userFileUri}/${id}`, item);
   }
 
-  public deleteUser(id: string, item: Partial<User>): Observable<User> {
-    return this.deleteItem(`${this._user_file_uri}`, item);
+  public deleteUser(id: string, item: Partial<User>): Observable<void> {
+    return this.deleteItem(`${this._userFileUri}`);
   }
 }

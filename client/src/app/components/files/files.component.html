@@ -1,5 +1,8 @@
 <div class="page-styling">
   <div>
+    <div class="label-styling">
+      <mat-label>Current Path: {{path}}</mat-label>
+    </div>
     <mat-card class="card-styling" *ngFor="let file of files">
       <div *ngIf="file.type === 'file'; then fileContent else folderContent"></div>
       <ng-template #fileContent>
@@ -21,7 +24,7 @@
           <mat-card-actions>
             <button mat-button class="button-style" (click)="onDownload(file)">VIEW</button>
             <button mat-button class="button-style">SHARE</button>
-            <button mat-button class="button-style">DELETE</button>
+            <button mat-button class="button-style" (click)="onDelete(file)">DELETE</button>
           </mat-card-actions>
         </div>
       </ng-template>
@@ -41,9 +44,9 @@
         </mat-card-content>
         <div class="card-action-styles">
           <mat-card-actions>
-            <button mat-button class="button-style" (click)="onOpen(file)">OPEN</button>
+            <button mat-button class="button-style" (click)="getUserFiles(file.path)">OPEN</button>
             <button mat-button class="button-style">SHARE</button>
-            <button mat-button class="button-style">DELETE</button>
+            <button mat-button class="button-style" (click)="onDelete(file)">DELETE</button>
           </mat-card-actions>
         </div>
       </ng-template>

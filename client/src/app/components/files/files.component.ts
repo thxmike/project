@@ -3,6 +3,8 @@ import * as fileSaver from 'file-saver';
 import { Component, OnInit } from '@angular/core';
 
 import { CurrentContextService } from 'src/app/services/current-context.service';
+import { FileRefreshService } from 'src/app/services/file-refresh.service';
+import { MatDialog } from '@angular/material/dialog';
 import { SharedComponent } from '../shared/shared.component';
 import { UserFileApiService } from 'src/app/services/user-file.service';
 
@@ -22,37 +24,55 @@ export class FilesComponent extends SharedComponent implements OnInit {
   }
 
   constructor(protected currentContextService: CurrentContextService,
-              private userFileApiService: UserFileApiService) {
-    super(currentContextService);
+              protected dialog: MatDialog,
+              private userFileApiService: UserFileApiService,
+              protected fileRefreshService: FileRefreshService
+              ) {
+    super(currentContextService, dialog, fileRefreshService);
     this.setupSubscriptions();
   }
 
   ngOnInit(): void {
-    this.getUserFiles();
+    this.getUserFiles(this.path);
   }
 
-  private getUserFiles() {
-    this.userFileApiService.getUserFiles(this.id, { path: `${this.path}` }).subscribe((fls) => {
-      fls.forEach((file) => {
-        this._files.push(file);
-      });
+  protected setupSubscriptions(): void{
+    super.setupSubscriptions();
+    this.fileRefreshService.trigger.subscribe(() => {
+      this.getUserFiles(this.path);
     });
   }
 
-  public onOpen(fileObj) {
-
-    const updated_array = [];
-    this.userFileApiService.getUserFiles(this.id, { path: `${fileObj.path}` }).subscribe((fls) => {
+  public getUserFiles(fileOrFolder: any): void {
+    this.userFileApiService.getUserFiles(this.userId, { path: `${fileOrFolder}` }).subscribe((fls) => {
+      const tmp = [];
       fls.forEach((file) => {
-        updated_array.push(file);
+        tmp.push(file);
       });
-      this._files = updated_array;
+      this._files = tmp;
+      this._path = fileOrFolder;
     });
+  }
 
+  public onDelete(file): void {
+      this.userFileApiService.deleteFileOrFolder(this.userId, file).subscribe(
+        () => {
+          console.log(file.type === 'folder' ? `Folder ${file.path} Deleted` : `File ${file.name} Deleted`);
+          this.getUserFiles(this.path);
+        }
+      );
+  }
+
+  public onShare(file, userId): void {
+    const payload = {
+      shared_user_ids: file.shared_user_ids.push(userId)
+    };
+
+    this.userFileApiService.updateFile(this.userId, file._id, payload);
   }
 
   public onDownload(fileObj): void{
-    this.userFileApiService.downloadFile(this.id, fileObj.name).subscribe(response => {
+    this.userFileApiService.downloadFile(this.userId, fileObj.name).subscribe(response => {
         const blob: any = new Blob([response], { type: 'text/json; charset=utf-8' });
         const url = window.URL.createObjectURL(blob);
         fileSaver.saveAs(blob, fileObj.original_file_name);

@@ -1,0 +1,51 @@
+@mixin dialog {
+  :host {
+  
+    .label-style{
+      font-size: small;
+    }
+
+    .progress-bar-style {
+      width: 80%;
+    }
+
+    .div-label-style {
+      text-align: left;
+      width: 80%;
+      padding-left: 10%;
+    }
+
+    .content-div-row-styling {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .content-div-column-styling {
+      display: flex;
+    }
+
+    .dialog-panel{
+      height: 100%;
+      color: #673ab7;
+    }
+
+    .button-style {
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+
+    .input-boxes {
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    .mat-dialog-input-box-style .mat-form-field {
+      width: 80% !important;
+    }
+
+    .mat-form-field {
+      width: 80% !important;
+    }
+
+  }
+}

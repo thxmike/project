@@ -21,3 +21,24 @@ body {
 .mat-input-wrapper{
   width:500px !important;
 }
+
+/*Material Dialog Custom Css*/ 
+.custom-dialog-container .mat-dialog-container{
+  padding: 10px;
+  color: #673ab7;
+}
+
+.custom-dialog-container .mat-dialog-container .mat-dialog-content{
+  height: 60%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.custom-dialog-container .mat-dialog-container .mat-dialog-actions{
+  align-items: center;
+  text-align: center;
+  vertical-align: bottom;
+}
+

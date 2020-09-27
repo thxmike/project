@@ -1,7 +1,9 @@
 export interface User {
-  id: string;
+  _id?: string;
+  id?: string;
   name: string;
   email: string;
+  password?: string;
 }
 
 export interface Context extends User {

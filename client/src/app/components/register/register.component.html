@@ -45,7 +45,7 @@
                 </div>
               </div>
               <div class="button-positions">
-                <button mat-button color="primary" (click)="register(name, email, pw)" [disabled]="checkFields(name, email, pw)">FINISH</button>
+                <button mat-button color="primary" (click)="onRegister(name, email, pw)" [disabled]="checkFields(name, email, pw)">FINISH</button>
                 <button mat-button color="primary" (click)="gotoLogin()">CANCEL</button>
               </div>
             </form>

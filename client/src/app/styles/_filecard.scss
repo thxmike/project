@@ -1,5 +1,6 @@
 @mixin filecard {
   :host {
+
     .card-styling {
       margin: 10px;
       width: 400px;
@@ -52,6 +53,14 @@
 
     .page-styling {
       width: 100%;
+      color: #673ab7;
+    }
+
+    .label-styling {
+      padding-top: 20px;
+      padding-bottom: 20px;
+      padding-left: 20px;
+      
     }
   }
 }

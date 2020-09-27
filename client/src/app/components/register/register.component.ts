@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
+import { CurrentContextService } from 'src/app/services/current-context.service';
+import { UserApiService } from 'src/app/services/user.service';
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -29,7 +32,8 @@ export class RegisterComponent implements OnInit {
     return this.form.get('pw');
   }
 
-  constructor(protected fb: FormBuilder) { }
+  constructor(protected fb: FormBuilder, protected userService: UserApiService,
+              protected currentContextService: CurrentContextService) { }
 
   ngOnInit(): void {
   }
@@ -48,11 +52,25 @@ export class RegisterComponent implements OnInit {
     localStorage.setItem('isLoggedIn', 'false');
   }
 
-  public register(name, email, pw): void{
+  public onRegister(name, email, pw): void{
 
-    // TODO: Call service set credentials if success redirect to navigation
-    localStorage.setItem('isRegistering', 'false');
-    localStorage.setItem('isLoggedIn', 'true');
+    this.userService.createUser({ name: name.value, password: pw.value, email: email.value }).subscribe((response) => {
+
+      const initpath = {path:  '/'};
+
+      const currentUser = {
+        id: response._id,
+        name: response.name,
+        password: response.password,
+        email: response.email
+      };
+
+      const context = {...currentUser, ...initpath  };
+
+      this.currentContextService.setCurrentContext(context);
+      localStorage.setItem('isRegistering', 'false');
+      localStorage.setItem('isLoggedIn', 'true');
+    });
   }
 
 }
