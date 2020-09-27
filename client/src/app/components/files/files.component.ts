@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { CurrentContextService } from 'src/app/services/current-context.service';
 import { FileRefreshService } from 'src/app/services/file-refresh.service';
 import { MatDialog } from '@angular/material/dialog';
+import { ShareDialogComponent } from '../share-dialog/share-dialog.component';
 import { SharedComponent } from '../shared/shared.component';
 import { UserFileApiService } from 'src/app/services/user-file.service';
 
@@ -54,6 +55,16 @@ export class FilesComponent extends SharedComponent implements OnInit {
     });
   }
 
+  public getUserFilesIShare(): void {
+    this.userFileApiService.getUserFiles(this.userId, {  $where: 'this.name.length > 1' }).subscribe((fls) => {
+      const tmp = [];
+      fls.forEach((file) => {
+        tmp.push(file);
+      });
+      this._files = tmp;
+    });
+  }
+
   public onDelete(file): void {
       this.userFileApiService.deleteFileOrFolder(this.userId, file).subscribe(
         () => {
@@ -63,12 +74,10 @@ export class FilesComponent extends SharedComponent implements OnInit {
       );
   }
 
-  public onShare(file, userId): void {
-    const payload = {
-      shared_user_ids: file.shared_user_ids.push(userId)
-    };
-
-    this.userFileApiService.updateFile(this.userId, file._id, payload);
+  public onShare(file): void {
+    this.onOpenBasicDialog<ShareDialogComponent>(
+      ShareDialogComponent,
+      { width: '35%', height: '30%', panelClass: 'custom-dialog-container'}, { userId: this.userId, file});
   }
 
   public onDownload(fileObj): void{

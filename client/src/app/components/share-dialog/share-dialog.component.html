@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>Share File</h1>
+
+<div mat-dialog-content>
+  <div>
+    <mat-form-field appearance="outline" class="mat-dialog-input-box-style">
+      <div class="content-div-row-styling">
+        <!-- Readonly Input to show File names -->
+        <input matInput #sharedEmail name="email" placeholder="email" />
+      </div>
+    </mat-form-field>
+    <mat-error *ngIf="!isValidEmail">
+      The email address you provided is not a valid user of the system.
+    </mat-error>
+  </div>
+
+</div>
+
+<div mat-dialog-actions align="center" valign="bottom">
+  <div>
+    <button mat-button class="button-style" (click)="onShare(sharedEmail.value)">Share</button>
+    <button mat-button class="button-style" (click)="onClose()">Cancel</button>
+  </div>
+</div>

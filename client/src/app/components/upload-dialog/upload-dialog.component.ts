@@ -50,7 +50,7 @@ export class UploadDialogComponent extends SharedComponent implements OnInit {
     this.setupSubscriptions();
   }
 
-  public onCancel(): void {
+  public onClose(): void {
     this.dialogRef.close();
   }
 
@@ -88,7 +88,7 @@ export class UploadDialogComponent extends SharedComponent implements OnInit {
       })).subscribe((event: any) => {
         if (typeof (event) === 'object') {
           console.log(event.body);
-          this.dialogRef.close();
+          this.onClose();
         }
       });
   }

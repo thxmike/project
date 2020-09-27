@@ -45,15 +45,16 @@ export class SharedComponent {
   }
 
   public onOpenBasicDialog<U>(UCtor: new (...args: any[]) => U,
-                              config: any ): void {
+                              config: any, data: any = null ): void {
     const dialogRef = this.dialog.open(UCtor, {
       width: config.width,
       height: config.height,
+      data,
       panelClass: config.panelClass
     });
 
     this._dialogSubscription = dialogRef.afterClosed().subscribe(() => {
-      console.log('Closing Dialoge');
+      console.log('Closing Dialog');
       this.fileRefreshService.update();
     });
   }

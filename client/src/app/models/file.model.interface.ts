@@ -1,4 +1,4 @@
-export interface File {
+export interface UserFile {
   _id: string;
   id: string;
   shared_user_ids: [string];

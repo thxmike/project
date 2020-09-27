@@ -11,12 +11,14 @@ import { NavigationModule } from './navigation/navigation.module';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './components/register/register.component';
+import { ShareDialogComponent } from './components/share-dialog/share-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ShareDialogComponent
   ],
   imports: [
     BrowserModule,

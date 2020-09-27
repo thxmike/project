@@ -15,7 +15,7 @@ export class UserApiService extends BaseHttpService<User> {
   public constructor(_http: HttpClient, appSettingsService: AppSettingsService) {
 
     super(_http);
-    this._userFileUri = appSettingsService.getValue('user_file_api').uri;
+    this._userFileUri = `${appSettingsService.getValue('user_file_api').uri}/users`;
   }
 
   public getUsers(pageNumber, pageSize, filter = {}): Observable<User[]> {
@@ -28,11 +28,11 @@ export class UserApiService extends BaseHttpService<User> {
   }
 
   public findUser(filter: string): Observable<User> {
-    return this.findItem(`${this._userFileUri}/users`, filter);
+    return this.findItem(`${this._userFileUri}`, filter);
   }
 
   public createUser(item: User): Observable<User> {
-    return this.postItem(`${this._userFileUri}/users`, item);
+    return this.postItem(`${this._userFileUri}`, item);
   }
 
   public updateUser(id: string, item: Partial<User>): Observable<User> {
