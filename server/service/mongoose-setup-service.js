@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const multer = require("multer");
 const crypto = require("crypto");
 const GridFsStorage = require("multer-gridfs-storage");
-const Grid = require('gridfs-stream');
 
 //Setup default with native ES6 Promise Library
 mongoose.Promise = Promise;

@@ -233,17 +233,14 @@ class FileController extends CommonController {
   }
 
   post_instance_request(req, res){
-    this._data_service.gfs.files.findOne({ filename: req.params.file_id }, (err, file) => {
-      // Check if file
-      if (!file || file.length === 0) {
-        return res.status(404).json({
-          err: 'No file exists'
-        });
-      }
-      
-      const readstream = this._data_service.gfs.createReadStream(file.filename);
-      readstream.pipe(res);
-     
+    this._data_service.gfs.find({filename: req.params.file_id})
+      .toArray((err, files) => {
+        if (!files || files.length === 0) {
+          return res.status(404).json({
+            err: "no files exist"
+          });
+        }
+        this._data_service.gfs.openDownloadStreamByName(req.params.file_id).pipe(res);
     });
   }
 
