@@ -1,6 +1,13 @@
 const CommonModelManager = require("./common-model-manager");
 
 class UserModelManager extends CommonModelManager {
+
+  default_filter(data) {
+    return {
+      "name": data.name
+    };
+  }
+  
   set_data(ent, data) {
 
     super.set_data(ent, data);

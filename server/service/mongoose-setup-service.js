@@ -86,8 +86,9 @@ class MongooseSetupService {
     return this._mongoose.connect(this.uri, this.options)
       .then(() => {
         console.log("Mongoose is Ready");
-        this.gfs = Grid(this.database_connection.db, this._mongoose.mongo);
-        this.gfs.collection('uploads');
+        this.gfs = new mongoose.mongo.GridFSBucket(this.database_connection.db, {
+          bucketName: "uploads"
+        });
         
         this.listen(this.database_connection);
         return Promise.resolve();

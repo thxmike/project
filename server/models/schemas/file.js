@@ -31,6 +31,9 @@ class FileSchema extends BaseSchema {
         "required": true,
         "ref": "users"
       },
+      "original_file_id":{
+        "type": mongoose.Schema.Types.ObjectId,
+      },
       "shared_user_ids": {
         "type": [mongoose.Schema.Types.ObjectId],
         "ref": "users"

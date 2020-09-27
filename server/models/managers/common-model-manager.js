@@ -11,6 +11,19 @@ class CommonModelManager {
     };
   }
 
+  static determine_identifier(instance) {
+    let mess = "Item";
+
+    if (instance && instance.code) {
+      mess = instance.code;
+    } else if (instance && instance.name) {
+      mess = instance.name;
+    } else if (instance && instance.id) {
+      mess = instance.id;
+    }
+    return mess;
+  }
+
   get_aggregate_operation(page = 1, per_page = 50, filter = {}) {
     //Mongoose is zero based but pagination is one based
     let mongoose_page = page - 1;

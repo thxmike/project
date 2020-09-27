@@ -9,7 +9,7 @@ class FileController extends CommonController {
     this._router
       .route(this.aggregate_route)
       .get(this.get_aggregate_request.bind(this))
-      //Middleware that binds to a storage location in the mongo database and allows additional operation
+      //Middleware that uploads to the bound to a storage location in the mongo database and allows additional operation
       .post(
         this._data_service.upload.single("file"),
         this.post_aggregate_request.bind(this)
@@ -22,6 +22,7 @@ class FileController extends CommonController {
     // fail the entire transaction
     let payload = {
       name: req.file.filename,
+      original_file_id: req.file.id,
       original_file_name: req.file.originalname,
       description: `${req.file.originalname} uploaded on ${req.file.uploadDate} with a size of ${req.file.size}`,
       path: req.query.path || "/",
@@ -110,7 +111,7 @@ class FileController extends CommonController {
         if(path){
           const files = response.message.filter((file) => file.path.startsWith(path));
           files.forEach((fileorfold) => {
-            fileorfold.toJSON
+            //fileorfold.toJSON
             let type = null;
             if(fileorfold.path === path){
               type = "file";
@@ -179,13 +180,52 @@ class FileController extends CommonController {
   delete_instance_request(req, res) {
 
     let id = req.params[`${this.alternate_name}_id`];
+    
+    let filter = this._check_filter(req);
 
-    this._data_service.gfs.deleteOne({ _id: id, root: 'uploads' }, (err, gridStore) => {
-      if (err) {
-        return res.status(404).json({ err: err });
+    if (this.has_parent) {
+      let parts = req.baseUrl.split("/");
+      let parent_id = `${this.parent_controller.alternate_name}_id`;
+      let objectid = `${parts[parts.length - 1]}`;
+      let item = { [parent_id] :objectid };
+
+      if(mongoose.isValidObjectId(objectid)){
+        objectid = ObjectId(objectid);
+        item =  { [parent_id]: objectid };
       }
-      this._data_service.file_model_manager.delete_operation(id, req.body).then((response) => {
-        res.status(response.status).json(response.message);
+      
+      filter = {
+        ...filter,
+        ...item,
+      };
+    }
+    req.query.filter = filter;
+
+    let args = BaseController.parse_query_string_to_args(req);
+
+    if(id !== "0"){
+      this.delete_item(id, filter.file_id, req, res);
+    } else {
+      return this._data_service.file_model_manager.get_aggregate_operation(...args).then((response) => {
+        response.message.forEach((record) => {
+          this.delete_item(record.original_file_id, record._id, req, res);
+        })
+      }).then(() => {
+        res.status(200).json("completed");
+      }).catch(() => {
+        res.status(400).send("deletion did not succeed");
+      })
+    }
+  }
+
+  delete_item(original_file_id, file_id, req, res){
+    this._data_service.gfs.delete(new mongoose.Types.ObjectId(original_file_id), (err) => {
+      if (err) {
+        //return res.status(404).json({ err: err });
+        //continue to delete the db
+      }
+      return this._data_service.file_model_manager.delete_operation(new mongoose.Types.ObjectId(file_id), req.body, false).then((response) => {
+        res.status(200).send(response);
       }).catch((err) => {
         return this.send_error(res, req, err, this.constructor.name, "delete_instance_request");
       });

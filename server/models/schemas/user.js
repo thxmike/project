@@ -18,6 +18,7 @@ class UserSchema extends BaseSchema {
 
     //Not needed
     this.schema.remove("description");
+    this.schema.remove("code");
     this.schema.add({
       "name": {
         "type": String,
