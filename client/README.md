@@ -9,7 +9,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Dependencies
 
-Once you have NodeJS installed execute the following command to install all of your dependencies.
+Once you have NodeJS installed execute the following command to in the root directy to install all of your dependencies.
 
 ```npm install```
 
